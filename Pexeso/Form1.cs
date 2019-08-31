@@ -12,8 +12,15 @@ namespace Pexeso
 {
     public partial class Form1 : Form
     {
-        //инициализация массива для генерации случайного списка. Можно перенести в параметры вызова функции!
+        //инициализация массива для генерации случайного списка. Не переносить в параметр вызова функции поскольку размер поля динамический! Написать функцию автозаполнения.
         protected int[] array = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+        //счетчик нажатия на изображение
+        protected int countClick = 0;
+        //переменные для тегов изображений
+        int tag1 = 0;
+        int tag2 = 0;
+        //
+        PictureBox[] pctBox = new PictureBox[12];
 
         public Form1()
         {
@@ -26,19 +33,44 @@ namespace Pexeso
             int[] random = RandomPermutation(array);
 
             //инициализация массива всех picturebox на форме
-            PictureBox[] pctBox = new PictureBox[12];
             int i = 0;
             foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
             {
                 pctBox[i] = pb;
+                pb.Click += new EventHandler(pb_Click);
                 i++;
             }
 
-            //цикл загрузки изображений. Добавить сюда генерацию тегов для сравнения карточек!
-            for (int j = 0; j < 11; j++) {
-                    pctBox[random[j]].Image = Image.FromFile("C:\\Users\\nnper\\Desktop\\Paxeso\\" + random[j] + ".jpg");
-                    pctBox[random[j + 1]].Image = Image.FromFile("C:\\Users\\nnper\\Desktop\\Paxeso\\" + random[j] + ".jpg");
+            //цикл загрузки изображений
+            for (int j = 0; j < 12; j++) {
+                pctBox[random[j]].Image = Image.FromFile("C:\\Users\\nnper\\Desktop\\Paxeso\\" + random[j] + ".jpg");
+                pctBox[random[j]].Tag = random[j];
+                pctBox[random[j + 1]].Image = Image.FromFile("C:\\Users\\nnper\\Desktop\\Paxeso\\" + random[j] + ".jpg");
+                pctBox[random[j + 1]].Tag = random[j];
                 j++;
+            }
+        }
+
+        //обработчик события нажатия на picturebox
+        //придумать как игнорировать двойное нажатие на одну карточку!
+        void pb_Click(object sender, EventArgs e)
+        {
+            PictureBox clickedPictureBox = sender as PictureBox;
+            countClick++;
+            if (countClick == 1)
+            {
+                tag1 = Convert.ToInt32(clickedPictureBox.Tag);
+            }
+            if (countClick == 2)
+            {
+                tag2 = Convert.ToInt32(clickedPictureBox.Tag);
+            }
+            if (countClick == 2) {
+                if (tag1 == tag2)
+                {
+                    countClick = 0;
+                    MessageBox.Show("Совпадение!");
+                } else countClick = 0;
             }
         }
 
