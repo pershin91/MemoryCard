@@ -34,10 +34,10 @@ namespace Pexeso
                 i++;
             }
 
-            //цикл загрузки изображений. Сейчас используются только четные изображения, нужно придумать как решить этот вопрос! Добавить сюда генерацию тегов для сравнения карточек!
+            //цикл загрузки изображений. Добавить сюда генерацию тегов для сравнения карточек!
             for (int j = 0; j < 11; j++) {
-                    pctBox[random[j]].Image = Image.FromFile("C:\\Users\\nnper\\Desktop\\Paxeso\\" + j + ".jpg");
-                    pctBox[random[j + 1]].Image = Image.FromFile("C:\\Users\\nnper\\Desktop\\Paxeso\\" + j + ".jpg");
+                    pctBox[random[j]].Image = Image.FromFile("C:\\Users\\nnper\\Desktop\\Paxeso\\" + random[j] + ".jpg");
+                    pctBox[random[j + 1]].Image = Image.FromFile("C:\\Users\\nnper\\Desktop\\Paxeso\\" + random[j] + ".jpg");
                 j++;
             }
         }
