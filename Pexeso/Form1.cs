@@ -19,8 +19,8 @@ namespace Pexeso
         //переменные для тегов изображений
         int tag1 = 0;
         int tag2 = 0;
-        //
-        PictureBox[] pctBox = new PictureBox[12];
+        //переменная для хранения ссылки на первое нажатое изображение
+        PictureBox clickPctBox = new PictureBox();
 
         public Form1()
         {
@@ -34,8 +34,10 @@ namespace Pexeso
 
             //инициализация массива всех picturebox на форме
             int i = 0;
+            PictureBox[] pctBox = new PictureBox[12];
             foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
             {
+                pb.Visible = true;
                 pctBox[i] = pb;
                 pb.Click += new EventHandler(pb_Click);
                 i++;
@@ -52,7 +54,6 @@ namespace Pexeso
         }
 
         //обработчик события нажатия на picturebox
-        //придумать как игнорировать двойное нажатие на одну карточку!
         void pb_Click(object sender, EventArgs e)
         {
             PictureBox clickedPictureBox = sender as PictureBox;
@@ -60,16 +61,18 @@ namespace Pexeso
             if (countClick == 1)
             {
                 tag1 = Convert.ToInt32(clickedPictureBox.Tag);
+                clickPctBox = clickedPictureBox;
             }
             if (countClick == 2)
             {
                 tag2 = Convert.ToInt32(clickedPictureBox.Tag);
             }
             if (countClick == 2) {
-                if (tag1 == tag2)
+                if (tag1 == tag2 && clickPctBox.Name != clickedPictureBox.Name)
                 {
                     countClick = 0;
-                    MessageBox.Show("Совпадение!");
+                    clickedPictureBox.Visible = false;
+                    clickPctBox.Visible = false;
                 } else countClick = 0;
             }
         }
