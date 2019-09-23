@@ -15,12 +15,14 @@ namespace Pexeso
         //инициализация массива для генерации случайного списка. Не переносить в параметр вызова функции поскольку размер поля динамический! Написать функцию автозаполнения.
         protected int[] array = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
         //счетчик нажатия на изображение
-        protected int countClick = 0;
+        int countClick = 0;
         //переменные для тегов изображений
         int tag1 = 0;
         int tag2 = 0;
         //переменная для хранения ссылки на первое нажатое изображение
         PictureBox clickPctBox = new PictureBox();
+        //счетчик
+        int point = 0;
 
         public Form1()
         {
@@ -29,10 +31,19 @@ namespace Pexeso
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //отмена подписки на собития "Чистка мусора"
+            foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
+            {
+                pb.Click -= new EventHandler(pb_Click);
+            }
+
             //генерация случайного списка
             int[] random = RandomPermutation(array);
 
             //инициализация массива всех picturebox на форме
+            countClick = 0;
+            int n = 0;
+            label1.Text = n.ToString();
             int i = 0;
             PictureBox[] pctBox = new PictureBox[12];
             foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
@@ -57,7 +68,9 @@ namespace Pexeso
         void pb_Click(object sender, EventArgs e)
         {
             PictureBox clickedPictureBox = sender as PictureBox;
+            clickedPictureBox.BorderStyle = BorderStyle.Fixed3D;
             countClick++;
+
             if (countClick == 1)
             {
                 tag1 = Convert.ToInt32(clickedPictureBox.Tag);
@@ -66,15 +79,26 @@ namespace Pexeso
             if (countClick == 2)
             {
                 tag2 = Convert.ToInt32(clickedPictureBox.Tag);
-            }
-            if (countClick == 2) {
                 if (tag1 == tag2 && clickPctBox.Name != clickedPictureBox.Name)
                 {
                     countClick = 0;
+                    addPoint();
                     clickedPictureBox.Visible = false;
                     clickPctBox.Visible = false;
-                } else countClick = 0;
+                }
+                else
+                {
+                    countClick = 0;
+                }
+                clickedPictureBox.BorderStyle = BorderStyle.None;
+                clickPctBox.BorderStyle = BorderStyle.None;
             }
+        }
+
+        void addPoint()
+        {
+            point++;
+            label1.Text = point.ToString();
         }
 
         //функция генерации случайного списка
